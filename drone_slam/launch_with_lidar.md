@@ -1,16 +1,3 @@
-02/22/26
-Samuel:
-
-* Get points clouds in RTAB-MAP to appear
-
-03/08/26
-Samuel:
-* Generate custom launch based on the launch.md
-
-04/05/26
-Samuel:
-* Create two separate directory for fast lio 2 and livox and build each package in these workspaces
-
 # SLAM Pipeline Setup: Fast-LIO2, EKF, and RTAB-Map
 
 This guide details how to integrate **Fast-LIO2** (for high-frequency LiDAR-Inertial Odometry) and an **Extended Kalman Filter (EKF)** into our ROS 2 autonomous drone mapping pipeline.
@@ -178,20 +165,21 @@ To test the entire SLAM stack, open **separate terminals** (ensure your `.bashrc
 > ⚠️ **Important:** Remove the IMU remap flag from your previous command so Fast-LIO2 can receive raw acceleration data!
 
 ```bash
-ros2 bag play ~/dev/auto-drone-mapping/bag_files/drone_warehouse_bag_0.db3 -s sqlite3 --clock
+ros2 bag play ~/dev/auto-drone-mapping/bag_files/drone_warehouse_bag_0.db3 -s sqlite3 --clock --loop
 ```
 
 ### Terminal 2 — Fast-LIO2 (LiDAR + IMU Odometry)
 
 ```bash
-ros2 launch fast_lio mapping.launch.py config_file:=avia.yaml use_sim_time:=true
+ros2 launch fast_lio mapping.launch.py config_file:=mid360.yaml use_sim_time:=true
 ```
 
 ### Terminal 3 — Extended Kalman Filter (Sensor Fusion)
 
 ```bash
 ros2 run robot_localization ekf_node --ros-args \
-    --params-file ~/auto-drone-mapping/src/your_package/config/ekf.yaml \
+    -p use_sim_time:=true \
+    --params-file ~/dev/auto-drone-mapping/drone_slam/config/ekf.yaml \
     --remap odometry/filtered:=/Fused_odom
 ```
 
