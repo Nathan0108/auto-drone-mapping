@@ -29,7 +29,7 @@ ekf_filter_node:
         false,
       ] # Accel
 
-    # Source 2: PX4 SITL Odometry (Update topic name as needed)
+    # Source 2: PX4 SITL Odometry
     odom1: /fmu/out/vehicle_odometry
     odom1_config:
       [

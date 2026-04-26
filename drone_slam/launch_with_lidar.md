@@ -162,16 +162,17 @@ To test the entire SLAM stack, open **separate terminals** (ensure your `.bashrc
 
 ### Terminal 1 — Virtual Drone (Bag Playback)
 
-> ⚠️ **Important:** Remove the IMU remap flag from your previous command so Fast-LIO2 can receive raw acceleration data!
+*Important: To play split bag files, point ROS 2 to the folder containing all .db3 chunks and the metadata.yaml, rather than a specific .db3 file.*
 
 ```bash
-ros2 bag play ~/dev/auto-drone-mapping/bag_files/drone_warehouse_bag_0.db3 -s sqlite3 --clock --loop
+ros2 bag play /home/spes_ignota/dev/auto-drone-mapping/bag_files/rosbag2_2026_04_26-15_42_48_0-001.db3 --clock --read-ahead-queue-size 10000 \
+--qos-profile-overrides-path /home/spes_ignota/dev/auto-drone-mapping/drone_slam/config/qos_overrides.yaml
 ```
 
 ### Terminal 2 — Fast-LIO2 (LiDAR + IMU Odometry)
 
 ```bash
-ros2 launch fast_lio mapping.launch.py config_file:=mid360.yaml use_sim_time:=true
+ros2 launch fast_lio mapping.launch.py config_file:=velodyne.yaml use_sim_time:=true
 ```
 
 ### Terminal 3 — Extended Kalman Filter (Sensor Fusion)
@@ -186,7 +187,6 @@ ros2 run robot_localization ekf_node --ros-args \
 ### Terminal 4 — RTAB-Map (The SLAM Brain)
 
 ```bash
-# Run the modified launch command from Phase 5 here
 ros2 launch rtabmap_launch rtabmap.launch.py \
     rtabmap_args:="--delete_db_on_start" \
     visual_odometry:=false \
@@ -196,7 +196,7 @@ ros2 launch rtabmap_launch rtabmap.launch.py \
     depth_topic:=/camera/depth/image_raw \
     camera_info_topic:=/camera/color/camera_info \
     subscribe_scan_cloud:=true \
-    scan_cloud_topic:=/lidar/points \
+    scan_cloud_topic:=/point_cloud \
     approx_sync:=true \
     qos:=2 \
     use_sim_time:=true
