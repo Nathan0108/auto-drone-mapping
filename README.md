@@ -26,11 +26,11 @@ Three layers: sensor data flows from the simulator, through the SLAM stack into 
 
 > EKF wiring: [drone_slam/config/ekf.yaml](drone_slam/config/ekf.yaml) — `odom0` = Fast-LIO2 pose (X/Y/Z + RPY), `odom1` = PX4 velocities.
 
-**3. RL Planning**: [drone-isaaclab](https://github.com/Nathan0108/drone-isaaclab).
+**3. RL Planning**: A seperate repository containing the Issac Lab work - [drone-isaaclab](https://github.com/Nathan0108/drone-isaaclab).
 
 ## Hardware & Sensors
 
-The simulated drone mirrors the planned physical airframe (X500 frame + Jetson companion; CAD in [CAD/](CAD/)) so software transfers with minimal change.
+The simulated drone will mirror the planned physical airframe (X500 frame + Jetson companion; [CAD/](CAD/)) so software transfers with minimal change.
 
 | Sensor        | Model                | Stream                     |
 | ------------- | -------------------- | -------------------------- |
